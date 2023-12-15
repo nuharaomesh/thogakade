@@ -1,5 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.dao.CustomerDAO;
 import com.example.layeredarchitecture.dao.CustomerDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
@@ -35,7 +36,7 @@ public class ManageCustomersFormController {
     public TextField txtCustomerAddress;
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
-    private CustomerDAOImpl cus = new CustomerDAOImpl();
+    private CustomerDAO cusDao = new CustomerDAOImpl();
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -69,7 +70,7 @@ public class ManageCustomersFormController {
         /*Get all customers*/
         try {
 
-            ArrayList<CustomerDTO> allCus = cus.getAllCus();
+            ArrayList<CustomerDTO> allCus = cusDao.getAllCus();
 
             for (CustomerDTO c:allCus) {
                 tblCustomers.getItems().add(new CustomerTM(c.getId(), c.getName(), c.getAddress()));
@@ -82,13 +83,13 @@ public class ManageCustomersFormController {
     private void initUI() {
         txtCustomerId.clear();
         txtCustomerName.clear();
-        txtCustomerAddress.clear();
-        txtCustomerId.setDisable(true);
-        txtCustomerName.setDisable(true);
-        txtCustomerAddress.setDisable(true);
-        txtCustomerId.setEditable(false);
         btnSave.setDisable(true);
         btnDelete.setDisable(true);
+        txtCustomerAddress.clear();
+        txtCustomerId.setDisable(true);
+        txtCustomerId.setEditable(false);
+        txtCustomerName.setDisable(true);
+        txtCustomerAddress.setDisable(true);
     }
 
     @FXML
@@ -103,16 +104,16 @@ public class ManageCustomersFormController {
     }
 
     public void btnAddNew_OnAction(ActionEvent actionEvent) {
+        txtCustomerId.clear();
+        btnSave.setText("Save");
+        txtCustomerName.clear();
+        btnSave.setDisable(false);
+        txtCustomerAddress.clear();
+        txtCustomerName.requestFocus();
         txtCustomerId.setDisable(false);
         txtCustomerName.setDisable(false);
         txtCustomerAddress.setDisable(false);
-        txtCustomerId.clear();
         txtCustomerId.setText(generateNewId());
-        txtCustomerName.clear();
-        txtCustomerAddress.clear();
-        txtCustomerName.requestFocus();
-        btnSave.setDisable(false);
-        btnSave.setText("Save");
         tblCustomers.getSelectionModel().clearSelection();
     }
 
@@ -139,7 +140,7 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
                 CustomerDTO dto = new CustomerDTO(id, name, address);
-                cus.saveCus(dto);
+                cusDao.saveCus(dto);
                 tblCustomers.getItems().add(new CustomerTM(id, name, address));
             } catch (Exception e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to save the customer " + e.getMessage()).show();
@@ -153,7 +154,7 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
 
-                cus.updateCus(new CustomerDTO(id, name, address));
+                cusDao.updateCus(new CustomerDTO(id, name, address));
             } catch (Exception e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to update the customer " + id + e.getMessage()).show();
             }
@@ -169,7 +170,7 @@ public class ManageCustomersFormController {
 
 
     boolean existCustomer(String id) throws Exception {
-        return cus.existCus(id);
+        return cusDao.existCus(id);
     }
 
 
@@ -181,7 +182,7 @@ public class ManageCustomersFormController {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
 
-            cus.delCus(id);
+            cusDao.delCus(id);
 
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
             tblCustomers.getSelectionModel().clearSelection();
@@ -194,7 +195,7 @@ public class ManageCustomersFormController {
 
     private String generateNewId() {
         try {
-            return cus.getId();
+            return cusDao.getId();
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new id " + e.getMessage()).show();
         }

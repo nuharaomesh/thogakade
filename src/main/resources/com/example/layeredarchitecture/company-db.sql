@@ -1,3 +1,4 @@
+DROP DATABASE company;
 create database company;
 
 use company;

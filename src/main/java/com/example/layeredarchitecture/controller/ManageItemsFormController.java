@@ -1,5 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.dao.ItemDAO;
 import com.example.layeredarchitecture.dao.ItemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
@@ -35,7 +36,7 @@ public class ManageItemsFormController {
     public TableView<ItemTM> tblItems;
     public TextField txtUnitPrice;
     public JFXButton btnAddNewItem;
-    private ItemDAOImpl itDao = new ItemDAOImpl();
+    private ItemDAO itDao = new ItemDAOImpl();
 
     public void initialize() {
         tblItems.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -73,7 +74,7 @@ public class ManageItemsFormController {
             /*Get all items*/
             ArrayList<ItemTM> list = itDao.getAllIt();
             for (ItemTM it: list) {
-                tblItems.getItems().add(new ItemTM(it.getCode(), it.getDescription(), it.getUnitPrice(), it.getQtyOnHand()));
+                tblItems.getItems().add(new ItemTM(it.getCode(), it.getDescription(), it.getQtyOnHand(), it.getUnitPrice()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -84,16 +85,16 @@ public class ManageItemsFormController {
 
     private void initUI() {
         txtCode.clear();
-        txtDescription.clear();
         txtUnitPrice.clear();
         txtQtyOnHand.clear();
+        txtDescription.clear();
+        btnSave.setDisable(true);
         txtCode.setDisable(true);
-        txtDescription.setDisable(true);
+        txtCode.setEditable(false);
+        btnDelete.setDisable(true);
         txtUnitPrice.setDisable(true);
         txtQtyOnHand.setDisable(true);
-        txtCode.setEditable(false);
-        btnSave.setDisable(true);
-        btnDelete.setDisable(true);
+        txtDescription.setDisable(true);
     }
 
     @FXML
@@ -108,18 +109,18 @@ public class ManageItemsFormController {
     }
 
     public void btnAddNew_OnAction(ActionEvent actionEvent) {
-        txtCode.setDisable(false);
-        txtDescription.setDisable(false);
-        txtUnitPrice.setDisable(false);
-        txtQtyOnHand.setDisable(false);
         txtCode.clear();
-        txtCode.setText(generateNewId());
-        txtDescription.clear();
         txtUnitPrice.clear();
         txtQtyOnHand.clear();
-        txtDescription.requestFocus();
-        btnSave.setDisable(false);
+        txtDescription.clear();
         btnSave.setText("Save");
+        txtCode.setDisable(false);
+        btnSave.setDisable(false);
+        txtDescription.requestFocus();
+        txtQtyOnHand.setDisable(false);
+        txtUnitPrice.setDisable(false);
+        txtDescription.setDisable(false);
+        txtCode.setText(generateNewId());
         tblItems.getSelectionModel().clearSelection();
     }
 
@@ -169,8 +170,8 @@ public class ManageItemsFormController {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
-                itDao.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
-                tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
+                itDao.saveItem(new ItemDTO(code, description, qtyOnHand, unitPrice));
+                tblItems.getItems().add(new ItemTM(code, description, qtyOnHand, unitPrice));
 
             } catch (Exception e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -183,7 +184,7 @@ public class ManageItemsFormController {
                 }
                 /*Update Item*/
 
-                itDao.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                itDao.updateItem(new ItemDTO(code, description, qtyOnHand, unitPrice));
 
                 ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
                 selectedItem.setDescription(description);

@@ -2,6 +2,7 @@ package com.example.layeredarchitecture.dao;
 
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
+import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -104,5 +105,27 @@ public class CustomerDAOImpl implements CustomerDAO{
             );
         }
         return list;
+    }
+
+    @Override
+    public CustomerDTO searchCus(String newValue) throws SQLException, ClassNotFoundException {
+
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        try {
+            if (!existCus(newValue + "")) {
+//                            "There is no such customer associated with the id " + id
+                new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
+            }
+
+            PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer WHERE id=?");
+            pstm.setString(1, newValue + "");
+            ResultSet rst = pstm.executeQuery();
+            rst.next();
+            CustomerDTO dto = new CustomerDTO(newValue + "", rst.getString("name"), rst.getString("address"));
+            return dto;
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Failed to find the customer " + newValue + "" + e).show();
+        }
+        return null;
     }
 }

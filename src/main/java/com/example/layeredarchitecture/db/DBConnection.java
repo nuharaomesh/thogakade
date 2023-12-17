@@ -9,8 +9,7 @@ public class DBConnection {
     private static DBConnection dbConnection;
     private final Connection connection;
 
-    private DBConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
+    private DBConnection() throws SQLException {
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/company", "root", "Omesh1106");
     }
 

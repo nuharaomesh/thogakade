@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OrderDetailsDAO {
 
-    boolean saveOrdDet(String orderId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
+    boolean saveOrdDet(OrderDetailDTO dto) throws SQLException, ClassNotFoundException;
 }

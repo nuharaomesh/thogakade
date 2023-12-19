@@ -70,7 +70,7 @@ public class ManageCustomersFormController {
         /*Get all customers*/
         try {
 
-            ArrayList<CustomerDTO> allCus = cusDao.getAllCus();
+            ArrayList<CustomerDTO> allCus = cusDao.getAll();
 
             for (CustomerDTO c:allCus) {
                 tblCustomers.getItems().add(new CustomerTM(c.getId(), c.getName(), c.getAddress()));
@@ -140,7 +140,7 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
                 CustomerDTO dto = new CustomerDTO(id, name, address);
-                cusDao.saveCus(dto);
+                cusDao.save(dto);
                 tblCustomers.getItems().add(new CustomerTM(id, name, address));
             } catch (Exception e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to save the customer " + e.getMessage()).show();
@@ -154,7 +154,7 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
 
-                cusDao.updateCus(new CustomerDTO(id, name, address));
+                cusDao.update(new CustomerDTO(id, name, address));
             } catch (Exception e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to update the customer " + id + e.getMessage()).show();
             }
@@ -170,7 +170,7 @@ public class ManageCustomersFormController {
 
 
     boolean existCustomer(String id) throws Exception {
-        return cusDao.existCus(id);
+        return cusDao.exist(id);
     }
 
 
@@ -182,7 +182,7 @@ public class ManageCustomersFormController {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
 
-            cusDao.delCus(id);
+            cusDao.delete(id);
 
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
             tblCustomers.getSelectionModel().clearSelection();
@@ -195,7 +195,7 @@ public class ManageCustomersFormController {
 
     private String generateNewId() {
         try {
-            return cusDao.getId();
+            return cusDao.genId();
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new id " + e.getMessage()).show();
         }
@@ -207,7 +207,6 @@ public class ManageCustomersFormController {
             int newCustomerId = Integer.parseInt(id.replace("C", "")) + 1;
             return String.format("C00-%03d", newCustomerId);
         }
-
     }
 
     private String getLastCustomerId() {

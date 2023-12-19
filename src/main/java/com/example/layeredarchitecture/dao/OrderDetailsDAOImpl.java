@@ -15,22 +15,7 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO{
     private ItemDAO itemDAO = new ItemDAOImpl();
 
     @Override
-    public boolean saveOrdDet(String orderId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
-
-        Connection connection = DBConnection.getDbConnection().getConnection();
-
-        PreparedStatement pstm = connection.prepareStatement("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)");
-
-            for (OrderDetailDTO detail : orderDetails) {
-
-                pstm.setString(1, orderId);
-                pstm.setString(2, detail.getItemCode());
-                pstm.setInt(3, detail.getQty());
-                pstm.setBigDecimal(4, detail.getUnitPrice());
-                pstm.executeUpdate();
-                //Search & Update Item
-                itemDAO.setValues(detail);
-            }
-            return true;
+    public boolean saveOrdDet(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
+        return SQLUtil.setQue("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)", dto.getoId(), dto.getItemCode(), dto.getQty(), dto.getUnitPrice());
     }
 }

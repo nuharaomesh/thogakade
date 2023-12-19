@@ -72,8 +72,8 @@ public class ManageItemsFormController {
         tblItems.getItems().clear();
         try {
             /*Get all items*/
-            ArrayList<ItemTM> list = itDao.getAllIt();
-            for (ItemTM it: list) {
+            ArrayList<ItemDTO> list = itDao.getAll();
+            for (ItemDTO it: list) {
                 tblItems.getItems().add(new ItemTM(it.getCode(), it.getDescription(), it.getQtyOnHand(), it.getUnitPrice()));
             }
         } catch (SQLException e) {
@@ -170,7 +170,7 @@ public class ManageItemsFormController {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
-                itDao.saveItem(new ItemDTO(code, description, qtyOnHand, unitPrice));
+                itDao.save(new ItemDTO(code, description, qtyOnHand, unitPrice));
                 tblItems.getItems().add(new ItemTM(code, description, qtyOnHand, unitPrice));
 
             } catch (Exception e) {
@@ -184,7 +184,7 @@ public class ManageItemsFormController {
                 }
                 /*Update Item*/
 
-                itDao.updateItem(new ItemDTO(code, description, qtyOnHand, unitPrice));
+                itDao.update(new ItemDTO(code, description, qtyOnHand, unitPrice));
 
                 ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
                 selectedItem.setDescription(description);

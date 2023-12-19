@@ -5,14 +5,6 @@ import com.example.layeredarchitecture.model.CustomerDTO;
 import java.sql.*;
 import java.util.ArrayList;
 
-public interface CustomerDAO {
+public interface CustomerDAO extends CrudDAO<CustomerDTO>{
 
-    ArrayList<CustomerDTO> getAllCus() throws Exception;
-    void saveCus(CustomerDTO dto) throws Exception;
-    void updateCus(CustomerDTO dto) throws SQLException, ClassNotFoundException;
-    void delCus(String id) throws SQLException, ClassNotFoundException;
-    String getId() throws SQLException, ClassNotFoundException;
-    boolean existCus(String id) throws SQLException, ClassNotFoundException;
-    ArrayList<CustomerDTO> getAllCusId() throws SQLException, ClassNotFoundException;
-    CustomerDTO searchCus(String newValue) throws SQLException, ClassNotFoundException;
 }

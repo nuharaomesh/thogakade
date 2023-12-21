@@ -1,13 +1,14 @@
-package com.example.layeredarchitecture.dao;
+package com.example.layeredarchitecture.dao.custom.impl;
 
-import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.dao.SQLUtil;
+import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class CustomerDAOImpl implements CustomerDAO{
+public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public ArrayList<CustomerDTO> getAll() throws SQLException, ClassNotFoundException {
@@ -29,7 +30,7 @@ public class CustomerDAOImpl implements CustomerDAO{
     }
 
     @Override
-    public boolean save(CustomerDTO dto) throws Exception {
+    public boolean save(CustomerDTO dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.setQue("INSERT INTO Customer VALUES (?,?,?)", dto.getId(), dto.getName(), dto.getAddress());
     }
 

@@ -19,7 +19,7 @@ public class SQLUtil {
         if (sql.startsWith("SELECT")) {
             return (T) pstm.executeQuery();
         } else {
-            return ((T) (Boolean) (pstm.executeUpdate() > 0));
+            return (T)(Boolean)(pstm.executeUpdate() > 0);
         }
     }
 }

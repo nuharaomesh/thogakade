@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -142,8 +143,10 @@ public class ManageCustomersFormController {
                 CustomerDTO dto = new CustomerDTO(id, name, address);
                 cusDao.save(dto);
                 tblCustomers.getItems().add(new CustomerTM(id, name, address));
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to save the customer " + e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
 
 
@@ -169,7 +172,7 @@ public class ManageCustomersFormController {
     }
 
 
-    boolean existCustomer(String id) throws Exception {
+    boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
         return cusDao.exist(id);
     }
 

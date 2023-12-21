@@ -31,7 +31,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public boolean save(CustomerDTO dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.setQue("INSERT INTO Customer VALUES (?,?,?)", dto.getId(), dto.getName(), dto.getAddress());
+        return SQLUtil.setQue("INSERT INTO Customer (id,name, address) VALUES (?,?,?)", dto.getId(), dto.getName(), dto.getAddress());
     }
 
     @Override
@@ -60,7 +60,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public boolean exist(String id) throws SQLException, ClassNotFoundException {
-        return SQLUtil.setQue("SELECT id FROM Customer WHERE id=?", id);
+        ResultSet rst = SQLUtil.setQue("SELECT id FROM Customer WHERE id=?", id);
+        return rst.next();
     }
 
     @Override

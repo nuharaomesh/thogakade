@@ -200,7 +200,6 @@ public class ManageItemsFormController {
 
 
     private boolean existItem(String code) throws Exception {
-
         return itDao.exist(code);
     }
 

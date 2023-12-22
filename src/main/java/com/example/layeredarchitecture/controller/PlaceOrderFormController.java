@@ -96,8 +96,8 @@ public class PlaceOrderFormController {
             if (newValue != null) {
                 try {
                     /*Search Customer*/
-                    var dto = placeOrderBO.searchCustomer(newValue);
-                    txtCustomerName.setText(dto.getName());
+                    var entity = placeOrderBO.searchCustomer(newValue);
+                    txtCustomerName.setText(entity.getName());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

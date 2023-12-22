@@ -1,14 +1,14 @@
 package com.example.layeredarchitecture.dao.custom.impl;
 
 import com.example.layeredarchitecture.dao.SQLUtil;
-import com.example.layeredarchitecture.dao.custom.CustomDAO;
+import com.example.layeredarchitecture.dao.custom.QueryDAO;
 import com.example.layeredarchitecture.model.CustomDTO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class QueryDAOImpl implements CustomDAO {
+public class QueryDAOImpl implements QueryDAO {
 
     @Override
     public ArrayList<CustomDTO> getCusAndOrd() throws SQLException, ClassNotFoundException {
